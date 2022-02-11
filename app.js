@@ -1,3 +1,5 @@
+const vote = require('./lib/vote')
+
 const express = require('express');
 
 let app = express();
@@ -12,9 +14,15 @@ app.set('port', process.env.PORT || 3000);
 
 app.use(express.static(__dirname + '/public'));
 
-
 app.get('/', function(req, res) {
 	res.render('home');
+});
+
+app.get('/vote/pet', function(req, res) {
+	vote.record(req.params.get, req.ip);
+	res.render('voted', {
+		petName: req.params.get
+	});
 });
 
 // 404 catch-all handler (middleware)
